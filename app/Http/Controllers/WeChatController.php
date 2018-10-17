@@ -47,7 +47,6 @@ class WeChatController extends Controller
     public function user()
     {
         $app = app('wechat.official_account');
-        $users = $app->user->list();
-        return $users;
+        return $app->user->list($nextOpenId = null);
     }
 }

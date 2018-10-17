@@ -46,7 +46,13 @@ class WeChatController extends Controller
     }
     public function user()
     {
-        $app = app('wechat.official_account');
+        $config = [
+            'app_id' => 'wxb2da08dedee851c5',
+            'secret' => 'db5fe129882bfd683fe267609882f671',
+            'token' => 'xm666',
+            'response_type' => 'array',           
+        ];
+        $app = Factory::officialAccount($config);
         return $app->user->list($nextOpenId = null);
     }
 }

@@ -44,5 +44,9 @@ class WeChatController extends Controller
     
         return $response = $app->server->serve();
     }
-    
+    public function user()
+    {
+        $app = app('wechat.official_account');
+        $users = $app->user->list();
+    }
 }

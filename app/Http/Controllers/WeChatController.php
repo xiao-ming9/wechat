@@ -32,7 +32,7 @@ class WeChatController extends Controller
                     return '你好';
                     break;
                 default:
-                    $user = $user = $this->app->user->get($openId);
+                    $user  = $this->app->user->get($openId);
                     return '欢迎关注'.$user['nickname'];
                     break;
             }

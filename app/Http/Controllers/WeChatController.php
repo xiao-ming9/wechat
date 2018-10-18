@@ -32,8 +32,9 @@ class WeChatController extends Controller
                     return '你好';
                     break;
                 default:
+                    $openId = $message['FromUserName'];//获取用户的openId
                     $user  = $this->app->user->get($openId);
-                    return '欢迎关注'.$user['nickname'];
+                    return '欢迎关注'.$user['nickname'];//获取用户的昵称
                     break;
             }
                 //return "欢迎来到小铭的测试号！";

@@ -31,19 +31,18 @@ class WeChatController extends Controller
                 $openId = $message['FromUserName'];//获取用户的openId
                 $user  = $this->app->user->get($openId);
                 return '欢迎关注'.$user['nickname'];//获取用户的昵称
-            }else{
-                switch($message['Content']){
-                    case '你好':
-                        return '你好';
-                        break;
-                    case '小铭帅不帅':
-                        return '帅';
-                        break;
-                    default:
-                        return '收到你的消息啦';
-                        break;
-                }
-            }    
+            }
+            switch($message['Content']){
+                case '你好':
+                    return '你好';
+                    break;
+                case '小铭帅不帅':
+                    return '帅';
+                    break;
+                default:
+                    return '收到你的消息啦';
+                    break;
+            }  
         });
 
         return $this->app->server->serve();

@@ -16,4 +16,4 @@ Route::get('/', function () {
 });
 Route::any('/wechat1','WeChatController@serve1');
 Route::any('/wechat2','WeChatController@serve2');
-Route::get('/user','WeChatController@user');
+Route::get('/user/{openId?}','WeChatController@user');

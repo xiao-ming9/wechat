@@ -8,6 +8,14 @@ use EasyWeChat\Factory;
 
 class WeChatController extends Controller
 {
+    public $app;
+
+    //指定默认值，否则无法解析构造函数
+    public function __construct($app='')
+    {
+        $app = app('wechat.official_account');
+        $this->app = $app;
+    }
     /**
      * 处理微信请求消息方法1
      * 
@@ -17,14 +25,23 @@ class WeChatController extends Controller
     {
         Log::info('request arrived.'); # 注意：Log 为 Laravel 组件，所以它记的日志去 Laravel 日志看，而不是 EasyWeChat 日志
 
-        $app = app('wechat.official_account');
-        $app->server->push(function($message){
-            return "欢迎来到小铭的测试号！";
+        // $app = app('wechat.official_account');
+        $this->app->server->push(function($message){
+            switch($message['content']){
+                case '你好':
+                    return '你好';
+                    break;
+                default:
+                    $user = $user = $this->app->user->get($openId);
+                    return '欢迎关注'.$user['nickname'];
+                    break;
+
+            }
+                //return "欢迎来到小铭的测试号！";
         });
 
-        return $app->server->serve();
+        return $this->app->server->serve();
 
-        
     }
 
     /**
@@ -44,9 +61,21 @@ class WeChatController extends Controller
     
         return $response = $app->server->serve();
     }
-    public function user()
+
+    /**
+     * 获取用户的信息
+     * 
+     * @return array
+     */
+    public function user($openId = null)
     {
-        $app = app('wechat.official_account');
-        return $app->user->list($nextOpenId = null);
+        if($openId == null){
+            //$app = app('wechat.official_account');
+            return $this->app->user->list($nextOpenId = null);
+        }else{
+            //$app = app('wechat.official_account');
+            $user = $this->app->user->get($openId);
+            return $user;
+        }       
     }
 }

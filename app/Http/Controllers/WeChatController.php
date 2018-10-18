@@ -28,7 +28,7 @@ class WeChatController extends Controller
         // $app = app('wechat.official_account');
         $this->app->server->push(function($message){
             switch($message['Content']){
-                case ($message['MsgType'] == 'even'):
+                case ($message['Event'] == 'subscribe'):
                     $openId = $message['FromUserName'];//获取用户的openId
                     $user  = $this->app->user->get($openId);
                     return '欢迎关注'.$user['nickname'];//获取用户的昵称

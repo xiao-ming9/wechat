@@ -27,24 +27,27 @@ class WeChatController extends Controller
 
         // $app = app('wechat.official_account');
         $this->app->server->push(function($message){
-            $event  = $message['Event'];
-            $content = $message['Content'];
-            if($event=='subscribe'){
-                $openId = $message['FromUserName'];//获取用户的openId
-                $user  = $this->app->user->get($openId);
-                return '欢迎关注'.$user['nickname'];//获取用户的昵称
+            if($message['MsgType']=='event'){
+                if($message['Event'] == 'subscribe'){
+                    $openId = $message['FromUserName'];//获取用户的openId
+                    $user  = $this->app->user->get($openId);
+                    return '欢迎关注'.$user['nickname'];//获取用户的昵称
+                }
             }
-            switch($content){
-                case '你好':
-                    return '你好';
-                    break;
-                case '小铭帅不帅':
-                    return '帅';
-                    break;
-                default:
-                    return '收到你的消息啦';
-                    break;
-            }  
+            
+            if($message['MsgType']=='text'){
+                switch($message['Content']){
+                    case '你好':
+                        return '你好';
+                        break;
+                    case '小铭帅不帅':
+                        return '帅';
+                        break;
+                    default:
+                        return '收到你的消息啦';
+                        break;
+                } 
+            }
         });
 
         return $this->app->server->serve();

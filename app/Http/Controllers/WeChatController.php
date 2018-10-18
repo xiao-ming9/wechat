@@ -27,7 +27,7 @@ class WeChatController extends Controller
 
         // $app = app('wechat.official_account');
         $this->app->server->push(function($message){
-            switch($message['content']){
+            switch($message['Content']){
                 case '你好':
                     return '你好';
                     break;
@@ -35,7 +35,6 @@ class WeChatController extends Controller
                     $user = $user = $this->app->user->get($openId);
                     return '欢迎关注'.$user['nickname'];
                     break;
-
             }
                 //return "欢迎来到小铭的测试号！";
         });

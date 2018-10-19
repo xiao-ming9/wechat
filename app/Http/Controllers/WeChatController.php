@@ -142,7 +142,8 @@ class WeChatController extends Controller
      */
     public function oauth()
     {
-        $user = session('wechat.oauth_user.snsapi_userinfo'); // 拿到授权用户资料
+        session('wechat.oauth_user.snsapi_userinfo'); // 拿到授权用户资料
+        $user = $this->app->auth->user();
         return $user->getName().'是傻吊';
     }
     

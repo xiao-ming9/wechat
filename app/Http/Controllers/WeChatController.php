@@ -129,7 +129,7 @@ class WeChatController extends Controller
         $this->app->template_message->send([
             'touser' => 'oRBmk0n0GkOPh2PozUcj3E0jk4bg',
             'template_id' => 'AjxeRo3HUdNjz7RWhGEsd8KnqnJsLIAIIiTs7-mifKY',
-            'url' => 'http://xiaoming.net.cn',
+            'url' => 'http://wx.xiaoming.net.cn/user',
             'data' => [
                 'Name' => 'xiaoming',
                 'Age' => '8',
@@ -143,7 +143,7 @@ class WeChatController extends Controller
     public function oauth()
     {
         $user = session('wechat.oauth_user.default'); // 拿到授权用户资料
-        return redirect()->away('http://www.xiaoming.net.cn');
+        return 'aaa';
     }
     
 } 

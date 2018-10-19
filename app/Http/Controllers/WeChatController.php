@@ -129,7 +129,7 @@ class WeChatController extends Controller
         $this->app->template_message->send([
             'touser' => 'oRBmk0n0GkOPh2PozUcj3E0jk4bg',
             'template_id' => 'AjxeRo3HUdNjz7RWhGEsd8KnqnJsLIAIIiTs7-mifKY',
-            'url' => 'http://wx.xiaoming.net.cn/user',
+            'url' => 'http://wx.xiaoming.net.cn/oauth',
             'data' => [
                 'Name' => 'xiaoming',
                 'Age' => '8',

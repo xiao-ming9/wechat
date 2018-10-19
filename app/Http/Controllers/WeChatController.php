@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Log;
-use EasyWeChat\Factory;
+use EasyWeChat\Factory;//用于注册微信接口
+use EasyWeChat\Kernel\Messages\Text;//用于定义消息的类型
 
 class WeChatController extends Controller
 {
@@ -34,7 +35,7 @@ class WeChatController extends Controller
                     return '欢迎关注'.$user['nickname'];//获取用户的昵称
                 }
             }
-            
+
             if($message['MsgType']=='text'){
                 switch($message['Content']){
                     case '你好':
@@ -44,7 +45,7 @@ class WeChatController extends Controller
                         return '帅';
                         break;
                     default:
-                        return '收到你的消息啦';
+                        return 'wx.xiaoming.net.cn/user';
                         break;
                 } 
             }
@@ -88,4 +89,61 @@ class WeChatController extends Controller
             return $user;
         }       
     }
-}
+
+    /**
+     * 群发消息方法1
+     * 
+     * 此处必须定义$msg为Message下某个对象实例，因为sendMessage参数要求，否则报错
+     * @return string
+     */
+    public function sendMsg1()
+    {
+        $msg = New Text('you are a clever boy');   
+        $this->app->broadcasting->sendMessage($msg);
+        return "send successfully";
+    }
+
+    /**
+     * 群发消息方法2
+     * 
+     * @return string
+     */
+    public function sendMsg2()
+    {
+        $this->app->broadcasting->sendText('you are a handsome boy');
+        return "send successfully";
+    }
+
+    /**
+     * 模板消息
+     * 
+     */
+    public function templateMsg()
+    {
+        $industryId1 = 1;
+        $industryId2 = 2;
+        //设置所属行业
+        $this->app->template_message->setIndustry($industryId1, $industryId2);
+        //return $this->app->template_message->getIndustry();
+        //return $this->app->template_message->getPrivateTemplates();
+        $this->app->template_message->send([
+            'touser' => 'oRBmk0n0GkOPh2PozUcj3E0jk4bg',
+            'template_id' => 'AjxeRo3HUdNjz7RWhGEsd8KnqnJsLIAIIiTs7-mifKY',
+            'url' => 'http://xiaoming.net.cn',
+            'data' => [
+                'Name' => 'xiaoming',
+                'Age' => '8',
+            ],
+        ]);
+    }
+
+    /**
+     * 微信网页认证
+     */
+    public function oauth()
+    {
+        $user = session('wechat.oauth_user.default'); // 拿到授权用户资料
+        dd($user);
+    }
+    
+} 

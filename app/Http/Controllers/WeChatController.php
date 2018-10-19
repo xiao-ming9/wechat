@@ -143,7 +143,7 @@ class WeChatController extends Controller
     public function oauth()
     {
         $user = session('wechat.oauth_user.default'); // 拿到授权用户资料
-        return $user;
+        return redirect()->to('xiaoming.net.cn');
     }
     
 } 

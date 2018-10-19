@@ -45,7 +45,7 @@ class WeChatController extends Controller
                         return '帅';
                         break;
                     default:
-                        return 'wx.xiaoming.net.cn/oauth';
+                        return 'http://wx.xiaoming.net.cn/oauth';
                         break;
                 } 
             }

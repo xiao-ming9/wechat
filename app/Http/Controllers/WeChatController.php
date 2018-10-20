@@ -143,7 +143,7 @@ class WeChatController extends Controller
      */
     public function oauth()
     {
-        $user = session(['wechat.oauth_user.default']);
+        $user = $this->app->oauth->user();
         return $user->getName().'是傻吊';
     }
     

@@ -30,10 +30,22 @@ class WeChatController extends Controller
         // $app = app('wechat.official_account');
         $this->app->server->push(function($message){
             if($message['MsgType']=='event'){
-                if($message['Event'] == 'subscribe'){
-                    $openId = $message['FromUserName'];//获取用户的openId
-                    $user  = $this->app->user->get($openId);
-                    return '欢迎关注'.$user['nickname'];//获取用户的昵称
+                // if($message['Event'] == 'subscribe'){
+                //     $openId = $message['FromUserName'];//获取用户的openId
+                //     $user  = $this->app->user->get($openId);
+                //     return '欢迎关注'.$user['nickname'];//获取用户的昵称
+                // }
+                switch($message['Event']){
+                    case 'subscribe':
+                        $openId = $message['FromUserName'];//获取用户的openId
+                        $user  = $this->app->user->get($openId);
+                        return '欢迎关注'.$user['nickname'];//获取用户的昵称
+                        break;
+                    case 'click':
+                        if($message['EventKey'] == "QRCODE" ){
+                            return 'hello';
+                        }
+                        break;
                 }
             }
 
@@ -186,7 +198,7 @@ class WeChatController extends Controller
             [
                 "type" => "click",
                 "name" => "扫码关注",
-                "key"  => "V1001_TODAY_MUSIC"
+                "key"  => "QRCODE"
             ],
             [
                 "name"       => "菜单",

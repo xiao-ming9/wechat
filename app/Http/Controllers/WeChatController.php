@@ -41,7 +41,7 @@ class WeChatController extends Controller
                         $user  = $this->app->user->get($openId);
                         return '欢迎关注'.$user['nickname'];//获取用户的昵称
                         break;
-                    case 'click':
+                    case 'CLICK':
                         if($message['EventKey'] == "QRCODE" ){
                             return 'hello';
                         }

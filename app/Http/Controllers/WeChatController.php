@@ -185,7 +185,7 @@ class WeChatController extends Controller
         $buttons = [
             [
                 "type" => "click",
-                "name" => "今日歌曲",
+                "name" => "扫码关注",
                 "key"  => "V1001_TODAY_MUSIC"
             ],
             [

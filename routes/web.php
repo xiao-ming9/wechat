@@ -23,3 +23,5 @@ Route::get('/template','WeChatController@templateMsg');
 Route::group(['middleware'=>['wechat.oauth:snsapi_userinfo']],function(){
     Route::get('/oauth','WeChatController@oauth');
 });
+Route::get('/media','WeChatController@media');
+Route::get('/qrcode','WeChatController@qrcode');

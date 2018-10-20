@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Log;
 use EasyWeChat\Factory;//用于注册微信接口
 use EasyWeChat\Kernel\Messages\Text;//用于定义消息的类型
+use Illuminate\Support\Facades\Storage;//用于文件上传
 
 class WeChatController extends Controller
 {
@@ -142,8 +143,72 @@ class WeChatController extends Controller
      */
     public function oauth()
     {
-        $user = $this->app->oauth->user();
+        $user = session(['wechat.oauth_user.default']);
         return $user->getName().'是傻吊';
     }
     
+    /**
+     * 上传素材
+     */
+    public function media()
+    {
+        $path = '/home/xiaoming/图片/2018-07-29 20-22-41 的屏幕截图.png';
+        $info = $this->app->media->uploadImage($path);//上传文件（图片）
+        $stream = $this->app->media->get($info['media_id']);//获取文件
+
+        //$stream返回\EasyWeChat\Kernel\Http\StreamResponse实例
+        //instanceof:（1）判断一个对象是否是某个类的实例，（2）判断一个对象是否实现了某个接口
+        if ($stream instanceof \EasyWeChat\Kernel\Http\StreamResponse) {
+            $this->app->broadcasting->sendImage($info['media_id']);
+            return 'ok';
+        }
+    }
+
+    /**
+     * 二维码
+     */
+    public function qrcode()
+    {
+        //获取二维码信息
+        $result = $this->app->qrcode->temporary('foo',60*60);
+        //通过上面获取的二维码信息的ticket获取二维码的url
+        $url = $this->app->qrcode->url($result['ticket']);
+        $content = file_get_contents($url);//获得二进制文件
+        Storage::put('qrcode.jpg',$content);
+    }
+
+    /**
+     * 公众号菜单
+     */
+    public function menu()
+    {
+        $buttons = [
+            [
+                "type" => "click",
+                "name" => "今日歌曲",
+                "key"  => "V1001_TODAY_MUSIC"
+            ],
+            [
+                "name"       => "菜单",
+                "sub_button" => [
+                    [
+                        "type" => "view",
+                        "name" => "搜索",
+                        "url"  => "http://www.baidu.com/"
+                    ],
+                    [
+                        "type" => "view",
+                        "name" => "网页认证测试",
+                        "url"  => "http://wx.xiaoming.net.cn/oauth"
+                    ],
+                    [
+                        "type" => "click",
+                        "name" => "赞一下我们",
+                        "key" => "V1001_GOOD"
+                    ],
+                ],
+            ],
+        ];
+        $app->menu->create($buttons);
+    }
 } 

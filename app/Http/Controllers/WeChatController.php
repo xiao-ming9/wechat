@@ -209,6 +209,6 @@ class WeChatController extends Controller
                 ],
             ],
         ];
-        $app->menu->create($buttons);
+        $this->app->menu->create($buttons);
     }
 } 

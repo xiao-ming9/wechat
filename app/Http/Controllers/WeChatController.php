@@ -41,6 +41,7 @@ class WeChatController extends Controller
                         $user  = $this->app->user->get($openId);
                         return '欢迎关注'.$user['nickname'];//获取用户的昵称
                         break;
+                    //菜单点击响应
                     case 'CLICK':
                         if($message['EventKey'] == "QRCODE" ){
                             return 'hello';
@@ -197,7 +198,7 @@ class WeChatController extends Controller
         $buttons = [
             [
                 "type" => "click",
-                "name" => "扫码关注",
+                "name" => "扫码关注呀",
                 "key"  => "QRCODE"
             ],
             [
@@ -222,5 +223,88 @@ class WeChatController extends Controller
             ],
         ];
         $this->app->menu->create($buttons);
+    }
+
+    /**
+     * 微信卡券
+     * @return json
+     */
+    public function createCard()
+    {
+        $card = $this->app->card;//获取实例
+        //添加测试白名单
+        $openids = ['oRBmk0n0GkOPh2PozUcj3E0jk4bg','oRBmk0omRyr48tYFCmpaKZ6ZPgGY'];
+        $user_result = $card->setTestWhitelist($openids);
+
+        //创建卡券
+
+        /**
+         * 卡券类型
+         *  团购券：GROUPON;
+         *  折扣券：DISCOUNT;
+         *  礼品券：GIFT; 
+         *  代金券：CASH;
+         *  通用券：GENERAL_COUPON;
+         *  会员卡：MEMBER_CARD;
+         *  景点门票：SCENIC_TICKET ；
+         *  电影票：MOVIE_TICKET；
+         *  飞机票：BOARDING_PASS；
+         *  会议门票：MEETING_TICKET；
+         *  汽车票：BUS_TICKET;
+         */
+        $cardType = 'DISCOUNT';
+        $attributes = [
+            'base_info' => [
+                'logo_url' => 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1540031633329&di=e45b9af751ee6aae9c8e4bac27b02bf9&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F0b46f21fbe096b6337ef116a07338744ebf8ac12.jpg',
+                'brand_name' => '小铭的小礼物',
+                'code_type' => 'CODE_TYPE_QRCODE',
+                'title' => '双人潮汕火锅套餐',
+                'color' => 'Color030',
+                'notice' => '使用时向服务员出示此券',
+                'description'=>'不够再继续找我拿',
+                "date_info" => [
+                    "type" => "DATE_TYPE_FIX_TERM",
+                    "fixed_term" => 365,
+                    "fixed_begin_term"=> 0,
+                ], 
+                "sku" => [
+                    "quantity"=> 10
+                ],
+
+            ],
+            'discount' => 90,
+        ]; 
+        return $card_result = $card->create($cardType, $attributes);
+    }
+
+    /**
+     * 创建卡券二维码
+     */
+    public function createCardQrcode()
+    {
+        $card = $this->app->card;
+        $cards = [
+            "action_name" => "QR_CARD",
+            "action_info" => [
+                "card" => [
+                    "card_id" => "pRBmk0ojH8vj69PaETXYAbZ_48KU",
+                    "outer_str" => "13b",
+                ],
+            ],
+        ];
+        //创建二维码
+        $result = $card->createQrCode($cards);
+    //     //获取二维码
+    //     $qrcode = $card->getQrCode($result['ticket']);
+    }
+
+    /**
+     *
+     */
+    public function getQrCode1()
+    {
+        $card = $this->app->card;
+        $ticket = 'gQFM8TwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyQWFUWTRwNHBlQWkxdy12SU50NEoAAgS_68pbAwSAM_EB';
+        return $card->getQrCodeUrl($ticket);
     }
 } 
